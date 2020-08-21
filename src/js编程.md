@@ -12,6 +12,37 @@
 
 ### 一个升序数组，包含重复项，找指定值第一次出现位置（头条）
 
+```
+// 二分查找
+function binarySearch(arr, val) {
+    let left = 0;
+    let right = arr.length;
+    let mid = Math.floor(left + right / 2);
+    while (left < right) {
+        if (arr[mid] === val) {
+            if (mid === 0 || arr[mid - 1] !== arr[mid]) {
+                break;
+            }
+            else {
+                right = mid;
+            }
+
+        }
+        if(val > arr[mid]) {
+            left = mid;
+        }
+        if (val < arr[mid]) {
+            right = mid;
+        }
+        mid = Math.floor(right + left / 2);
+    }
+    return mid;
+}
+const arr3 = [1,2,2,3,3,3,3,4,4,5,5,6,7,7,7,7,7,7,8,9,10,11,11,11,12,12,12];
+
+// console.log(binarySearch(arr3, 7));
+```
+
 ### 封装一个cacheRequest 可缓存的异步请求，只有首次发送时才发出真实请求，后续都请求缓存，考虑第二次请求发出时首次请求未返回或者失败的情况（快手）
 
 ### 函数防抖和节流
