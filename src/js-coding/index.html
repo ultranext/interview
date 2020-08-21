@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .body {
+            width: 300px;
+            height: 3000px;
+            background: red;
+            overflow: auto;
+            padding-top: 600px;
+        }
+        .content {
+            width: 50%;
+            height: 400px;
+            background: bisque;
+        }
+    </style>
+</head>
+<body>
+    <div id="parent" class="body">
+        <div id="child" class="content">
+            abc
+        </div>
+    </div>
+<script>
+const $parent = document.getElementById('parent');
+const $child =  document.getElementById('child');
+
+$parent.addEventListener('scroll', function(e) {
+    console.log('parent', e);
+});
+$child.addEventListener('scroll', function(e) {
+    console.log('child', e);
+});
+window.onload = function(){
+    smoothScrollToEl('.content', 300, function() {console.log('done')});
+};
+
+function smoothScrollToEl(el, duration, cb) {
+    const $el = document.querySelector(el);
+    const top = $el.getBoundingClientRect().top;
+    const winHeight = window.innerHeight || document.documentElement.clientHeight;
+    let windowScrollTop = window.scrollY;
+    let distance;
+    if (top > winHeight) {
+        distance = top - winHeight;
+    }
+    else {
+        distance = winHeight - top;
+    }
+    const to = top + windowScrollTop;
+    const gap = 10;
+    const iteration = duration / 10;
+    const stepD = distance / iteration;
+
+    const step = () => {
+        if (to > windowScrollTop) {
+            windowScrollTop += stepD;
+            window.scrollTo(0, windowScrollTop);
+            setTimeout(step, gap);
+        }
+        else {
+            cb();
+        }
+    }
+    setTimeout(step, gap);
+
+}
+let o = {a: 1};
+const obj = {
+    date: new Date(),
+    r: /d{3}/g,
+    o1: o,
+    o2: o,
+    fn() {console.log(0);}
+};
+obj.obj = obj;
+function deepClone (obj) {
+    let targetMap = new Map();
+    const _deepClone = target => {
+        if (typeof target  === 'Function') {
+            return target;
+        }
+        if (!target || typeof target !== 'Object') {
+            return target;
+        }
+        // regExp|Date|function|
+        if (target instanceof RegExp) {
+            return new RegExp(target);
+        }
+        if (target instanceof Date) {
+            return new Date(target);
+        }
+       
+        if (targetMap.has(target)) {
+            return targetMap.get(target);
+        }
+
+        let result = target instanceof Array ? [] : {};
+        targetMap.set(target, target);
+        for (let prop in target) {
+            result[prop] = _deepClone(target[prop]);
+        }
+        return result;
+
+    }
+    return _deepClone(obj);
+};
+
+
+function deepClone2(target, hash = new WeakMap()) {
+    const Constructor = target.constructor;
+    let result;
+    switch (constructor) {
+        case RegExp:
+        case Date:
+        result = new Constructor(target)
+            break;
+        default:
+            if (hash.has(target)) {
+                return hash.get(target);
+            }
+            hash.set(target, target);
+            break;
+    }
+    result = new Constructor();
+    for (let key of Object.keys(target)) {
+        result[key] = typeof target[key] === 'Object' ? deepClone(target[key], hash): target[key];
+    }
+    return result;
+}
+
+console.log(deepClone(obj));
+console.log(deepClone2(obj));
+
+function unique(arr, result = []) {
+    // for (let i = 0; i < arr.length; i++) {
+    //     if (arr[i] instanceof Array) {
+    //         result = [...result, ...unique(arr[i])];
+    //     }
+    //     else {
+    //         result.push(arr[i]);
+    //     }
+    // }
+    // return result;
+
+
+    return arr.reduce((acc, cur) => {
+        return cur instanceof Array 
+            ? [...acc, ...unique(cur)]
+            : [...acc, cur]
+    }, []);
+}
+
+const arrs = [1,[2, [3,4], 5], 6,7];
+console.log(unique(arrs));
+
+
+function binarySearch(arr, val) {
+    let left = 0;
+    let right = arr.length;
+    let mid = Math.floor(left + right / 2);
+    while (left < right) {
+        if (arr[mid] === val) {
+            if (mid === 0 || arr[mid - 1] !== arr[mid]) {
+                break;
+            }
+            else {
+                right = mid;
+            }
+
+        }
+        if(val > arr[mid]) {
+            left = mid;
+        }
+        if (val < arr[mid]) {
+            right = mid;
+        }
+        mid = Math.floor(right + left / 2);
+    }
+    return mid;
+}
+const arr3 = [1,2,2,3,3,3,3,4,4,5,5,6,7,7,7,7,7,7,8,9,10,11,11,11,12,12,12];
+
+console.log(binarySearch(arr3, 7));
+
+
+
+
+
+</script>
+</body>
+</html>
