@@ -11,11 +11,14 @@
             background: red;
             overflow: auto;
             padding-top: 600px;
+            /* position: relative; */
         }
         .content {
             width: 50%;
             height: 400px;
             background: bisque;
+            padding: 20px;
+            border: 20px solid #ccc;
         }
     </style>
 </head>
@@ -28,6 +31,11 @@
 <script>
 const $parent = document.getElementById('parent');
 const $child =  document.getElementById('child');
+let pos = {
+    startX: 0,
+    startY: 0,
+    
+};
 
 $parent.addEventListener('scroll', function(e) {
     console.log('parent', e);
@@ -35,10 +43,37 @@ $parent.addEventListener('scroll', function(e) {
 $child.addEventListener('scroll', function(e) {
     console.log('child', e);
 });
-
-window.onload = function(){
-    smoothScrollToEl('.content', 300, function() {console.log('done')});
+$child.onmousedown = function(e){
+    console.log('mousedown', e);
+    console.log('this', this);
 };
+// $child.onmousemove = function(e){
+//     console.log('mousemove', e);
+//     console.log('this', this);
+// };
+
+// $child.addEventListener('mousedown', function(e) {
+//     console.log('mousedown', e);
+//     console.log('this', this);
+//     console.log('offsetLeft', this.offsetLeft);
+//     console.log('offsetTop', this.offsetTop);
+//     console.log('offsetParent', this.offsetParent);
+
+// });
+// $child.addEventListener('mousemove', function(e) {
+//     console.log('mousemove', e);
+// });
+// $child.addEventListener('mouseup', function(e) {
+//     console.log('mouseup', e);
+// });
+// $child.addEventListener('click', function(e) {
+//     console.log('mouseup', e);
+
+// });
+
+// window.onload = function(){
+//     smoothScrollToEl('.content', 300, function() {console.log('done')});
+// };
 
 function smoothScrollToEl(el, duration, cb) {
     const $el = document.querySelector(el);
@@ -213,6 +248,76 @@ const curry = function(fn, length) {
         }
     }
 }
+
+function asyncAdd(a, b, callback) {
+  setTimeout(function () {
+    callback(null, a + b);
+  }, 1000);
+}
+
+// async function sum(...args) {
+//     return args.reduce(async (acc, cur) => {
+//         const result = await new Promise((resolve, reject) => {
+//             asyncAdd(acc, cur, function (_, res) {resolve(res);});
+//         });
+//         return result;
+//     });
+// }
+async function sum(...args) {
+    if (args.length < 2) {
+        return args[0] || 0;
+    }
+    let i = 0;
+    let result = args[0];
+    while (i + 1 < args.length) {
+        result = await new Promise(resolve => {
+            asyncAdd(result, args[i+1], function (_, sum) {
+                resolve(sum);
+            });
+        });
+        i++;
+    }
+    return result;
+}
+
+
+async function steps(n) {
+    let i = 0;
+    while (i < n) {
+        await new Promise(resolve => {
+            setTimeout(function() {
+                i++;
+            }, 30)
+        });
+    }
+}
+
+console.log(sum(1,2,3).then(e => console.log(e)));
+
+
+
+const cacheRequest = (function () {
+    let requestMap = new Map();
+    return function (url, data, cb) {
+        let promise = requestMap.get(url);
+        if (!promise) {
+            promise = new Promise((resolve, reject) => {
+                request(url, data, {
+                    success(res) {
+                        resolve(res);
+                    },
+                    fail(e) {
+                        requestMap.delete(url);
+                        reject(e);
+                    }
+                })
+            });
+            requestMap.set(url, promise);
+        }
+        return promise.then(res => cb(res), err => cb(e));
+    }
+    
+})();
 
 
 

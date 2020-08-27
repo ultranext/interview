@@ -1,4 +1,4 @@
-export const singleton = (function(constructor) {
+export const singleton = (function() {
     let instance;
     return function(...args) {
         if (!instance) {
