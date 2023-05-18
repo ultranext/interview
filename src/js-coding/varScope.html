@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+</body>
+<script>
+    var a = 1;
+    let b = 2;
+    const c = 3;
+    console.log('a', window.a);  
+    console.log('b', window.b);
+    console.log('c', window.c);
+    
+    let d = f = 2;
+    console.log('d', window.d);
+    console.log('f', window.f);
+
+    const g = {}
+    g.test = 4
+    console.log('g', g)
+  
+    console.log('i', i)
+    var i = 5
+
+    console.log('h', h)
+    let h = 5
+</script>
+<script>
+    console.log(a);
+    console.log(b);
+    console.log(c);
+</script>
+</html>
+
+<!-- a 1
+b undefined
+c undefined
+d undefined
+f 2
+g Object
+i undefined
+Uncaught ReferenceError: Cannot access 'h' before initialization
+    at 22
+1
+2
+3 -->
