@@ -23,12 +23,20 @@ setTimeout(function () {
     console.log('setTimeout');
 }, 0)
 async1();
-new Promise(function (resolve) {
+let p = new Promise(function (resolve) {
     console.log('promise3');
     resolve();
-}).then(function () {
+})
+p.then(function () {
     console.log('promise4');
+    throw new Error();
+}).catch(() => {
+    console.log('promise4_err')
 });
+p.then(function() {
+    console.log('promise4_another_then')
+})
+
 console.log('script end');
 
 // script start
@@ -40,8 +48,11 @@ console.log('script end');
 // promise2
 // async1 end
 // promise4
+// promise4_another_then
 // Error: error in promise2 then
 //     at <anonymous>:13:15
+// promise4_err
 // error in promise2 catched
+// setTimeout
 
 
