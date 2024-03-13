@@ -28,3 +28,32 @@
 输出：0​
 解释：version1 没有第三级修订号，这意味着它的第三级修订号默认为 “0”。
 */
+
+function compareVer(version1, version2) {
+    const v1 = version1.split('.');
+    const v2 = version2.split('.');
+    let i = 0;
+    while(v1[i] && v2[i]) {
+        if (+v1[i] > +v2[i]) {
+            return 1;
+        }
+        if (+v1[i] < +v2[i]) {
+            return -1;
+        }
+        i++;
+    }
+    if (v1[i] && v1[i] !== '0') {
+        return 1;
+    } 
+    if (v2[i] && v1[2] !== '0') {
+        return -1
+    }
+    return 0;
+}
+
+console.log(compareVer('1.1.3', '1.1.25'));
+console.log(compareVer('1.1.3', '2.1.25'));
+console.log(compareVer('1.1.3', '1.1'))
+console.log(compareVer('0.1.3', '1.1'))
+console.log(compareVer('1.1', '1.1.1'))
+console.log(compareVer('1.0.3', '1.1.2'))
