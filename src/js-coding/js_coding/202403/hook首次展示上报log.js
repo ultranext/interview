@@ -11,5 +11,27 @@ return ...​
 function isInViewPort(node: DOMNode) {​
 // return boolean​
 }​​​
-
  */
+
+function useViewReport() {
+    const flag = useRef(false);
+
+}
+
+function useInViewPort(node) {
+    const [isInView, setIsInView] = useState(false);
+    useEffect(() => {
+        const Oberver = new IntersectionObserver((entries) => {
+            const entry = entries[0]
+            if (entry.isIntersecting) {
+                console.log('in viewport');
+                setIsInView(true);
+                Oberver.unobserve(entry.target);
+            } else {
+                setIsInView(false);
+            }
+        })
+        Oberver.observe(node);
+    }, []);
+    return isInView;
+}

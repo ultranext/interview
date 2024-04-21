@@ -7,3 +7,27 @@
 'aaabbccc' -> ''
 不允许使用类似string.replace函数。要求时间、空间复杂度尽量优化
  */
+// 栈
+
+function removeStr(str) {
+    if (!str) {
+        return '';
+    }
+    const stack = [];
+    for (let i = 0; i < str.length; i++) {
+        const char = str[i];
+        if (char === 'b') {
+            continue;
+
+        }
+        if (['a', 'c'].includes(char) && ['a', 'c'].includes(stack[stack.length - 1])) {
+            continue;
+        }
+        stack.push(char);
+    }
+    return stack.join('');
+}
+
+console.log(removeStr('aacbd'));
+console.log(removeStr('aaabbccc'));
+console.log(removeStr('aabcd'));

@@ -23,3 +23,4 @@ setTimeout(() => {
   logger.log(5).delay(500).log(6);
 }, 1000);
  */
+

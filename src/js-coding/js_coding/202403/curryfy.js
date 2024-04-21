@@ -23,3 +23,15 @@ const currySum2 = curryfy(sum2)​
 
 currySum2(10)(20)(5) // 25​
 currySum2(10, 20) (5) // 25
+
+function curryfy(fn) {
+    return function curried(...args) {
+        if (args.length >= fn.length) {
+            return fn.call(null, ...args);
+        } else {
+            return function (...args2) {
+                return curried.call(null, ...args, ...args2);
+            }
+        }
+    }
+}

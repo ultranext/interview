@@ -16,3 +16,16 @@ const b =  [1, 2, true, null, '3']​
 a[2] = b;​
 b[2] = a;
  */
+
+function flat(arr, res = []) {
+    for(let i = 0; i < arr.length; i++) {
+        if (arr[i] instanceof Array) {
+            res.concat(flat(arr[i], res));
+        } else {
+            res.push(arr[i])
+        }
+    }
+    return res;
+}
+
+console.log(flat([1,2,[3, [4,5, [6]]], 7,8]));

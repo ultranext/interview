@@ -13,3 +13,12 @@ p.timeout(1000).then().catch()​
 
 p.race([p1, p2,  p3]).then()
  */
+
+function timeoutPromise(ms, promise) {
+    const timeoutPromise = new Promise((res, rej) => {
+        setTimeout(() => {
+            rej(new Error('timeout'));
+        }, ms);
+    });
+    return Promise.race([promise, timeoutPromise]);
+}​

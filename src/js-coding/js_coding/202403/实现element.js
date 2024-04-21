@@ -25,3 +25,25 @@ document.body.appendChild(ulRoot);​​​
   <li class='item'>Item 3</li>​
 </ul>​
  */
+
+class Vnode {
+  constructor(tag, attr, children) {
+    this.tag = tag;
+    this.attr = attr;
+    this.children = children;
+  }
+  render() {
+    const el = document.createElement(this.tag);
+    Object.keys(this.attr).forEach(k => el.setAttribute(k, this.attr[k]));
+    if (this.children.length) {
+      this.children.forEach(({tag, attr, children}) => {
+        const child = new Vnode(tag, attr, children).render();
+        el.appendChild(child);
+      })
+    }
+  }
+}
+
+function el(tag, attr, children) {
+  return new Vnode(tag, attr, children);
+}

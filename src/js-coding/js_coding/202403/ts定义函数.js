@@ -7,3 +7,4 @@ TS： 定义一个函数，函数名clone，入参value（任意类型），返�
 
 function clone (value) { return value }
  */
+function clone (value: T):T { return value }

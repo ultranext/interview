@@ -21,3 +21,23 @@ function promiseRetry(promiseFn, maxTry) {
     })
 }
 ```
+
+
+ function promiseRetry(promiseFn, maxTry) {
+    let count = 0;
+    const request = (fn, count, maxTry, resolve, reject) => {
+        fn().then((res) => {
+            resolve(res);
+        }).catch(e => {
+            if (count <= maxTry) {
+                request(fn, count++, maxTry, resolve, reject)
+            }
+            else {
+                reject(e);
+            }
+        });
+    }
+    return new Promise((resolve, reject) => {
+        request(promiseFn, count, maxTry, resolve, reject);
+    });
+ }
