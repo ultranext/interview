@@ -11,3 +11,33 @@ isEqual(stooge, clone);
 => true
 
 */
+
+
+function isEqual(a, b) {
+    if (a === b) {
+        return true;
+    }
+
+    if (typeof a !== typeof b) {
+        return false;
+    }
+
+    if ((a !== null && b === null) || (a === null) && b !== null ) {
+        return false;
+    }
+
+    const keysOfa = Object.keys(a);
+    const keysOfb = Object.keys(b);
+
+    if (keysOfa.length !== keysOfb.length) {
+        return false;
+    }
+
+    for (let k of keysOfa) {
+        if (!isEqual(a, b)) {
+            return false;
+        }
+    }
+    return true;
+
+}

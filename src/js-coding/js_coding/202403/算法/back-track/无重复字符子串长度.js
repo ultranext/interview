@@ -53,5 +53,27 @@ function getLenOfSubstr(s) {
 
 }
 
-console.log(getLenOfSubstr(s));
+// console.log(getLenOfSubstr(s));
 
+
+
+function getMaxSubstr(str) {
+   const len = str.length;
+   let left = 0; let right = 1;
+   const map = new Map();
+   map.set([left[0], left]);
+   let max = 0;
+   while(right < len) {
+      if (map.has(str[right])) {
+         left = map.get(str[right]) + 1;
+         map.set(left[0], right);
+         map.set([str[right], right]);
+      } else {
+         map.set([str[right], right]);
+      }
+      max = Math.max(max, right - left + 1);
+      right++;
+   }
+   return max;
+}
+console.log(getMaxSubstr(s));
